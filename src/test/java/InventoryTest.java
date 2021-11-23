@@ -45,14 +45,11 @@ class InventoryTest {
         try {
             p = new Product("product2", 100);
             i.addItem(p,100);
-            try {
-                i.deleteItem(new Product("FakeProduct", 100));
-            } catch (NoSuchElementException e){
-            } finally {
-                assertTrue(i.getStock().containsKey(p));
-                i.deleteItem(p);
-                assertFalse(i.getStock().containsKey(p));
-            }
+            assertThrows(NoSuchElementException.class, () ->
+                    i.deleteItem(new Product("FakeProduct", 100)));
+            assertTrue(i.getStock().containsKey(p));
+            i.deleteItem(p);
+            assertFalse(i.getStock().containsKey(p));
         } catch (InvalidNameException | TooFewProductsException e) {
             e.printStackTrace();
         }
@@ -63,7 +60,9 @@ class InventoryTest {
         Product p;
         try {
             p = new Product("product3", 100);
+            assertThrows(NoSuchElementException.class, () -> i.removeItem(p, 100));
             i.addItem(p,100);
+            assertThrows(TooFewProductsException.class, () -> i.removeItem(p, 200));
             i.removeItem(p, 25);
             assertEquals(75, (int) i.getStock().get(p));
             i.deleteItem(p);
@@ -104,8 +103,8 @@ class InventoryTest {
             i.addOrder(o1);
             i.addOrder(o2);
             assertEquals(2, i.getOrder().size());
-            i.deleteOrder(o1);
-            i.deleteOrder(o2);
+            i.deleteOrder(o1.getOrderID());
+            i.deleteOrder(o2.getOrderID());
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }
@@ -122,11 +121,13 @@ class InventoryTest {
                     new Store("store2"),
                     new Salesman("sales2"),
                     new HashMap<Product,Integer>(0));
+            assertThrows(NoSuchElementException.class, () ->
+                    i.deleteOrder(o1.getOrderID()));
             i.addOrder(o1);
             i.addOrder(o2);
             assertEquals(2, i.getOrder().size());
-            i.deleteOrder(o1);
-            i.deleteOrder(o2);
+            i.deleteOrder(o1.getOrderID());
+            i.deleteOrder(o2.getOrderID());
             assertTrue(i.getOrder().isEmpty());
         } catch (InvalidNameException e) {
             e.printStackTrace();
@@ -175,8 +176,8 @@ class InventoryTest {
             i.addOrder(o1);
             i.addOrder(o2);
             assertEquals(testOrders, i.getOrder());
-            i.deleteOrder(o1);
-            i.deleteOrder(o2);
+            i.deleteOrder(o1.getOrderID());
+            i.deleteOrder(o2.getOrderID());
         } catch (InvalidNameException e) {
             e.printStackTrace();
         }

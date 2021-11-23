@@ -55,16 +55,17 @@ public class WarehouseWorker extends Employee{
         order.setOrderStatus("Processing");
     }
 
-    /**
-     * Removes order from this warehouse workers list of orders,
-     * and sets the status of the specified order to "Completed"
-     * @param order
-     */
-    public void completeOrder(Order order){
-        this.workingOn = null;
-        order.setOrderStatus("Completed");
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WarehouseWorker)) return false;
+        WarehouseWorker that = (WarehouseWorker) o;
+        return username.equals(that.username) && Objects.equals(workingOn, that.workingOn);
     }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, workingOn);
+    }
 
 }

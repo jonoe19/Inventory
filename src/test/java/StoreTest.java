@@ -6,6 +6,7 @@ class StoreTest {
 
     @Test
     void setName() {
+        assertThrows(InvalidNameException.class, () -> s1.setName(""));
         try {
             s1.setName("Store1");
         } catch (InvalidNameException e) {
@@ -20,6 +21,7 @@ class StoreTest {
 
     @Test
     void setPhoneNr() {
+        assertThrows(InvalidNameException.class, () -> s1.setPhoneNr(-1));
         try {
             s1.setPhoneNr(12345678);
         } catch (InvalidNameException e) {
