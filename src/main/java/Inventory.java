@@ -36,7 +36,7 @@ public class Inventory {
     }
 
     /**
-     * Deletes all instnances of product p from this inventory
+     * Deletes all instances of product p from this inventory
      * @param p the product to be deleted
      * @throws NoSuchElementException If no element in this inventory matches p
      */
@@ -67,7 +67,7 @@ public class Inventory {
         } else {
             stock.remove(p, qty);
         }
-        if (stock.get(p) == 0){
+        if(stock.get(p) == 0){
             stock.remove(p);
         }
     }
@@ -78,11 +78,7 @@ public class Inventory {
      * @return true if p is in stock
      */
     public boolean isInStock(Product p) throws NoSuchElementException{
-        if (stock.containsKey(p)){
-            return stock.get(p) > 0;
-        } else{
-            return false;
-        }
+        return (stock.containsKey(p) && stock.get(p) > 0);
     }
 
     /**

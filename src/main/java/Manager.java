@@ -14,14 +14,14 @@ public class Manager extends Employee{
     /**
      * Constructor.
      * @param username
-     * @throws InvalidUsernameException
+     * @throws InvalidNameException
      */
-    public Manager(String username) throws InvalidUsernameException{
+    public Manager(String username) throws InvalidNameException{
         if(usernameValid(username)) {
             this.username = username;
             this.employees = new ArrayList<>();
         }else
-            throw new InvalidUsernameException();
+            throw new InvalidNameException();
     }
 
     /**
@@ -53,7 +53,7 @@ public class Manager extends Employee{
      * Creates new salesman.
      * @param username
      */
-    public void newSalesman(String username) throws InvalidUsernameException{
+    public void newSalesman(String username) throws InvalidNameException{
         employees.add(new Salesman(username));
     }
 
@@ -61,7 +61,7 @@ public class Manager extends Employee{
      * Creates new warehouse worker.
      * @param username
      */
-    public void newWarehouseWorker(String username) throws InvalidUsernameException{
+    public void newWarehouseWorker(String username) throws InvalidNameException{
         employees.add(new WarehouseWorker(username));
     }
 

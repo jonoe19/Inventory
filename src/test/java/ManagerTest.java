@@ -19,7 +19,7 @@ class ManagerTest {
             m1 = new Manager("1");
             m2 = new Manager("2");
             m3 = new Manager("2");
-        }catch(InvalidUsernameException e){
+        }catch(InvalidNameException e){
             e.printStackTrace();
         }
     }
@@ -28,7 +28,7 @@ class ManagerTest {
         Manager nullman = null;
         try{
             nullman = new Manager("");
-        } catch (InvalidUsernameException e) {
+        } catch (InvalidNameException e) {
             nullman = null;
         }
         finally {
@@ -41,10 +41,10 @@ class ManagerTest {
     void newSalesman(){
         try{
             m.newSalesman("salesman1");
-        } catch (InvalidUsernameException e){
+        } catch (InvalidNameException e){
             System.out.println();
         } finally {
-            assertThrows(InvalidUsernameException.class, () -> m.newSalesman(""));
+            assertThrows(InvalidNameException.class, () -> m.newSalesman(""));
             assertTrue(m.getEmployees()
                     .stream()
                     .anyMatch(s -> s.getUsername()
@@ -60,7 +60,7 @@ class ManagerTest {
     void newWarehouseWorker(){
         try {
             m.newWarehouseWorker("warehouse man");
-        } catch (InvalidUsernameException e) {
+        } catch (InvalidNameException e) {
             e.printStackTrace();
         }
     }
@@ -73,7 +73,7 @@ class ManagerTest {
             m.newWarehouseWorker("warehouse man");
             tests.add(new Salesman("sales man"));
             tests.add(new WarehouseWorker("warehouse man"));
-        }catch (InvalidUsernameException e){
+        }catch (InvalidNameException e){
             e.printStackTrace();
         } finally {
             assertEquals(tests, m.getEmployees());

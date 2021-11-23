@@ -28,12 +28,12 @@ public class WarehouseWorker extends Employee{
      * Constructor.
      * @param username
      */
-    public WarehouseWorker(String username) throws InvalidUsernameException{
+    public WarehouseWorker(String username) throws InvalidNameException{
         if(usernameValid(username)) {
             this.username = username;
             this.workingOn = null;
         }else
-            throw new InvalidUsernameException();
+            throw new InvalidNameException();
     }
 
     /**

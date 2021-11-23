@@ -18,12 +18,12 @@ class SalesmanTest {
             s3 = new Salesman("Salesman3");
             s4 = new Salesman("Salesman4");
 
-        }catch(InvalidUsernameException e){
+        }catch(InvalidNameException e){
             e.printStackTrace();
         }
         try{
             nullman = new Salesman("");
-        }catch(InvalidUsernameException e){
+        }catch(InvalidNameException e){
             nullman = null;
         }
 

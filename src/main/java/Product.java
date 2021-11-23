@@ -9,12 +9,12 @@ public class Product {
      * @param name
      * @param price
      */
-    public Product(String name, int price) throws InvalidProductNameException{
+    public Product(String name, int price) throws InvalidNameException{
         if(isValidName(name)) {
             this.name = name;
             this.price = price;
         } else
-            throw new InvalidProductNameException();
+            throw new InvalidNameException();
     }
 
     /**

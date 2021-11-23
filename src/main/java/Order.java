@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class Order {
     private static int firstAvailableID = 0;
@@ -16,10 +17,10 @@ public class Order {
      * @param orderedProducts
      */
     public Order(Store store, Salesman salesman, HashMap<Product,Integer> orderedProducts){
-        store = this.store;
-        salesman = this.salesman;
-        orderedProducts = this.orderedProducts;
-        orderStatus = "Pending";
+        this.store = store;
+        this.salesman = salesman;
+        this.orderedProducts = orderedProducts;
+        orderStatus = OrderStatus.PENDING;
         orderID = firstAvailableID;
         firstAvailableID++;
 

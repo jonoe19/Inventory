@@ -17,12 +17,12 @@ public class Salesman extends Employee{
      * Constructor.
      * @param username
      */
-    public Salesman(String username) throws InvalidUsernameException {
+    public Salesman(String username) throws InvalidNameException {
         if(usernameValid(username)) {
             this.username = username;
             this.customers = new ArrayList<>();
         }else
-            throw new InvalidUsernameException();
+            throw new InvalidNameException();
     }
 
     /**
