@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SalesmanTest {
-
+    Inventory i = Inventory.getInstance();
     Salesman s1;
     Salesman s2;
     Salesman s3;
@@ -26,7 +26,6 @@ class SalesmanTest {
         }catch(InvalidNameException e){
             nullman = null;
         }
-
     }
 
     @Test
@@ -50,7 +49,18 @@ class SalesmanTest {
 
     @Test
     void createOrder() {
-
-
+        Store imerco = new Store("Imerco");
+        int orderID = s1.createOrder(imerco);
+        //System.out.println(imerco);
+        //System.out.println(i.getOrder().toString());
+        assertTrue(i.getOrder()
+                .stream()
+                .anyMatch(s -> s.getStore().equals(imerco)));
+        int orderID2 = s2.createOrder(null);
+        assertTrue(i.getOrder()
+                .stream()
+                .anyMatch(s -> s.getStore().toString().contains("inapplicable")));
+        i.deleteOrder(orderID);
+        i.deleteOrder(orderID2);
     }
 }

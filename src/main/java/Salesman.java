@@ -64,11 +64,16 @@ public class Salesman extends Employee{
     }
 
     /**
-     * Creates a new order for a specified store
+     * Creates a new order for a specified store, and adds it to the inventory
      * @param store
      * @return order
      */
-    public Order createOrder(Store store){
-        return new Order(store, this, new HashMap<Product,Integer>());
+    public int createOrder(Store store){
+        if(store == null){
+            store = new Store("inapplicable");
+        }
+        Order o = new Order(store, this, new HashMap<Product,Integer>());
+        Inventory.getInstance().addOrder(o);
+        return o.getOrderID();
     }
 }

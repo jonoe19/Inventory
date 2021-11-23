@@ -1,43 +1,42 @@
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 class OrderTest {
-    Order o = null;
-    Order n = null;
-    HashMap<Product, Integer> hm = new HashMap<Product, Integer>();
+    Order o;
+    Order n;
 
     @BeforeEach
-    void setUp(){
-        try {
-            hm.put(new Product("Pan", 3), 2);
-            hm.put(new Product("Pot", 2), 2);
-            hm.put(new Product("Peter Pan", 1), 1);
-            n = new Order(new Store("Store1"), new Salesman("salesman1"), hm);
-            o = new Order(new Store("S"), new Salesman("salesman2"), hm);
-        } catch (InvalidUsernameException | InvalidProductNameException e) {
+    void setUp() {
+        try{
+            n = new Order(new Store("Store1"), new Salesman("salesman1"), new HashMap<Product, Integer>(0));
+            o = new Order(new Store("S"), new Salesman("salesman2"), new HashMap<Product, Integer>(0));
+            o.addProduct(new Product("Pan", 3), 2);
+            o.addProduct(new Product("Pot", 2), 1);
+            n.addProduct(new Product("Pan", 3), 2);
+            n.addProduct(new Product("Pot", 2), 1);
+        } catch (InvalidNameException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     void orderStatus() {
-        o.setOrderStatus("Pending");
-        assertEquals(o.getOrderStatus(), "Pending");
-        assertThrows(Exception.class, () -> o.setOrderStatus("lol"));
+        o.setOrderStatus(OrderStatus.PENDING);
+        assertEquals(o.getOrderStatus(), OrderStatus.PENDING);
     }
 
     @Test
-    void getStore() {
-        assertTrue(o.getStore().toString().contains("Store1"));
+    void getStore(){
+        assertTrue(n.getStore().toString().contains("Store1"));
     }
 
     @Test
     void getSalesman() {
-        assertEquals(o.getSalesman().getUsername(),"salesman1");
+        assertEquals(o.getSalesman().getUsername(),"salesman2");
         assertFalse(o.getSalesman().equals(n.getSalesman()));
     }
 
@@ -49,34 +48,40 @@ class OrderTest {
 
     @Test
     void getOrderedProducts() {
-        assertTrue(o.getOrderedProducts().containsKey("Peter Pan"));
+        assertFalse(o.getOrderedProducts().keySet().stream().anyMatch( s -> s.getName() == "Peter Pan"));
         assertEquals(n.getOrderedProducts(),o.getOrderedProducts());
-        assertTrue(o.getOrderedProducts().size() == 3);
-        assertTrue(o.getOrderedProducts().values().stream().reduce(0, Integer::sum) == 5);
+        assertTrue(o.getOrderedProducts().size() == 2);
+        assertTrue(o.getOrderedProducts().values().stream().reduce(0, Integer::sum) == 3);
     }
 
     @Test
     void addProduct() {
         try{
-
             o.addProduct(new Product("pan2", 200), 2);
-            assertTrue(o.getOrderedProducts().containsKey("pan2"));
+            assertTrue(o.getOrderedProducts().keySet().stream().anyMatch(s -> s.getName() == "pan2"));
+            o.addProduct(new Product("pan2", 200), 2);
+            assertEquals(o.getOrderedProducts().get(new Product("pan2", 200)), 4);
 
-            o.addProduct(new Product("pan3", 200), -1);
+            assertThrows(IllegalArgumentException.class, () -> o.addProduct(new Product("pan3", 200), -1));
             assertFalse(o.getOrderedProducts().containsValue(-1));
 
-            o.addProduct(new Product("pan4", 200), 0);
-            assertFalse(o.getOrderedProducts().containsKey("pan4"));
+            assertThrows(IllegalArgumentException.class,()-> o.addProduct(new Product("pan4", 200), 0));
+            assertFalse(o.getOrderedProducts().keySet().stream().anyMatch(s -> s.getName() == "pan4"));
 
-            o.addProduct(new Product("Pan", 200), 0);
-            o.addProduct(new Product(null, 200), 1);
-        } catch (InvalidProductNameException e) {
+            //Product can be named null
+            assertDoesNotThrow(() -> o.addProduct(new Product(null, 200), 1));
+        } catch (InvalidNameException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     void deleteProduct() {
+        assertTrue(o.getOrderedProducts().keySet().stream().anyMatch(s -> s.getName() == "Pan") );
+        o.deleteProduct("Pan");
+        assertFalse(o.getOrderedProducts().keySet().stream().anyMatch(s -> s.getName() == "Pan") );
 
+        assertDoesNotThrow(() -> o.deleteProduct("Pot"));
+        assertThrows(NoSuchElementException.class, () -> o.deleteProduct("Pat"));
     }
 }

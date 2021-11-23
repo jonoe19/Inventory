@@ -24,15 +24,13 @@ class InventoryTest {
             Integer qty1 = 1;
             Integer qty2 = 2;
             assertNotNull(p);
-            try{
-                i.addItem(p, qty1);
-                i.addItem(p, qty2);
-            } catch (InvalidParameterException e){
-                e.printStackTrace();
-            }
+            assertThrows(InvalidParameterException.class, () -> i.addItem(p, -1));
+            i.addItem(p, qty1);
+            i.addItem(p, qty2);
             assertTrue(i.isInStock(p));
-            assertTrue(i.getStock().get(p).equals(3));
-        } catch (InvalidProductNameException e) {
+            assertEquals(3, (int) i.getStock().get(p));
+            i.deleteItem(p);
+        } catch (InvalidNameException | InvalidParameterException e) {
             e.printStackTrace();
         } catch (TooFewProductsException e) {
             e.printStackTrace();

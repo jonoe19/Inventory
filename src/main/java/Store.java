@@ -16,19 +16,28 @@ public class Store {
         this.phoneNr = -1;
     }
 
-    public void setName(String name) throws InvalidNameException{
-        if(isValidString(name))
+    public void setName(String name) throws InvalidNameException {
+        if (isValidString(name)){
             this.name = name;
-        else
+        } else {
             throw new InvalidNameException();
+        }
     }
 
-    public void setAddress(String address){
-        this.address = address;
+    public void setAddress(String address) throws InvalidNameException{
+        if(isValidString(address)){
+            this.address = address;
+        } else {
+            throw new InvalidNameException();
+        }
     }
 
-    public void setPhoneNr(int phoneNr){
-        this.phoneNr = phoneNr;
+    public void setPhoneNr(int phoneNr) throws InvalidNameException{
+        if(phoneNr >= 0) {
+            this.phoneNr = phoneNr;
+        } else {
+            throw new InvalidNameException();
+        }
     }
 
     public Boolean isValidString(String s){

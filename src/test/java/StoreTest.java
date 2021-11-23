@@ -1,9 +1,18 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StoreTest {
 
+    Store s1;
+    Store s2;
+
+    @BeforeEach
+    public void startUp(){
+        s1 = new Store("Imerco");
+        s2 = new Store("Bahne");
+    }
     @Test
     void setName() {
         assertThrows(InvalidNameException.class, () -> s1.setName(""));
@@ -17,6 +26,14 @@ class StoreTest {
 
     @Test
     void setAddress() {
+        assertThrows(InvalidNameException.class, () -> s1.setAddress(""));
+        try {
+            s1.setAddress("Istedvænget 11.3 tv, 5000 Odense C");
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
+        assertTrue(s1.toString().contains("Istedvænget 11.3 tv, 5000 Odense C"));
+
     }
 
     @Test
@@ -28,9 +45,5 @@ class StoreTest {
             e.printStackTrace();
         }
         assertTrue(s1.toString().contains("12345678"));
-    }
-
-    @Test
-    void testToString() {
     }
 }

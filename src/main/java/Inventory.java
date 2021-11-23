@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class Inventory {
     public void addItem(Product p, Integer qty) throws InvalidParameterException {
         if (qty < 0) throw new InvalidParameterException();
         if (stock.containsKey(p)) {
-            stock.put(p, stock.get(p) + qty);
+            stock.replace(p, stock.get(p) + qty);
         } else {
             stock.put(p, qty);
         }
@@ -65,7 +66,7 @@ public class Inventory {
             throw new TooFewProductsException("Tried to remove " + qty + " of " + p.getName() + ", but the inventory " +
                     "only contains " + stock.get(p));
         } else {
-            stock.remove(p, qty);
+            stock.put(p, stock.get(p)-qty);
         }
         if(stock.get(p) == 0){
             stock.remove(p);
@@ -91,25 +92,36 @@ public class Inventory {
 
     /**
      * Delete an existing order
-     * @param o Order to delete
+     * @param id Order to delete
      * @throws NoSuchElementException If the order doesn't exist
      */
-    public void deleteOrder(Order o) throws NoSuchElementException{
-        if(!orders.contains(o)){
+    public void deleteOrder(int id) throws NoSuchElementException{
+        if(!orders.stream().anyMatch(s -> s.getOrderID() == id)){ //If ID doesn't exist in list of orders
             throw new NoSuchElementException();
+        } else{
+            orders.remove(orders.stream()
+                    .filter(s -> s.getOrderID() == id)
+                    .findFirst()
+                    .get()
+            );
         }
-        orders.remove(o);
     }
 
     /**
-     * Returns a list of all products in stock
-     * @return An arraylist of products
+     * Returns a copy of the map of all products in stock
+     * @return A hashmap with products as key, and number of that product as the value
      */
     public HashMap<Product,Integer> getStock(){
         HashMap<Product,Integer> products = new HashMap<>();
         stock.forEach((k,v) -> {if(v != 0) products.put(k,v); });
-        return products;
+        return (HashMap<Product, Integer>) products.clone();
     }
 
-
+    /**
+     * Returns a copy of the list of all orders
+     * @return An arraylist containing a copy of all orders
+     */
+    public ArrayList<Order> getOrder(){
+        return orders;
+    }
 }

@@ -1,3 +1,4 @@
+import java.security.InvalidParameterException;
 import java.util.Objects;
 
 public class Product {
@@ -21,8 +22,11 @@ public class Product {
      * Sets the price to the given value
      * @param price
      */
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPrice(int price) throws InvalidParameterException{
+        if (price < 0)
+            throw new InvalidParameterException("Cannot add a negative price to a product");
+        else
+            this.price = price;
     }
 
     /**
@@ -56,5 +60,11 @@ public class Product {
 
     public Boolean isValidName(String name){
         return name != "";
+    }
+
+    @Override
+    public String toString(){
+        return "Name: " + name +
+                "Price: " + price + "\n";
     }
 }
